@@ -14,12 +14,12 @@ export default new Router({
     {
       path: '/',
       name: 'GoodsList',
-      component:GoodsList
+      component: GoodsList
     },
     {
       path: '/cart',
       name: 'Cart',
-      component:Cart
+      component: Cart
     },
     {
       path: '/goods',
@@ -29,17 +29,17 @@ export default new Router({
     {
       path: '/address',
       name: 'Address',
-      component:Address
+      component: Address
     },
     {
       path: '/orderConfirm',
       name: 'OrderConfirm',
-      component:OrderConfirm
+      component: OrderConfirm
     },
     {
       path: '/orderSuccess',
       name: 'OrderSuccess',
-      component:OrderSuccess
+      component: OrderSuccess
     }
   ]
 })
