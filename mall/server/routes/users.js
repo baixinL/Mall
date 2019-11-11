@@ -89,4 +89,28 @@ router.get('/checkLogin', function (req, res, next) {
     })
   }
 })
+
+//获取购物车数据
+router.get('/cardList', (req, res, next) => {
+  var userId = req.cookies.userId;
+  console.log("获取购物车数据");
+  User.findOne({userId:userId},  (err, doc) => {
+    console.log("findOne");
+    if(err) {
+      res.json({
+        status:'1',
+        msg:err.message,
+        result:''
+      })
+    } else {
+      if(doc) {
+        res.json({
+          status: '0',
+          msg: '',
+          result: doc.cardList
+        })
+      }
+    }
+  })
+})
 module.exports = router;

@@ -641,7 +641,11 @@ a:hover {
   height: 40px;
   line-height: 40px;
 }
-
+.btn--m:hover{
+  background-color: #d1434a;
+  border-color: #d1434a;
+  color: #fff;
+}
 .btn--s {
   height: 35px;
   line-height: 35px;
@@ -1165,6 +1169,8 @@ html {
 
 .md-modal .confirm-tips {
   min-height: 5.65em;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .md-modal .alert-tips {
@@ -1256,7 +1262,7 @@ html {
   }
 
   .md-modal .confirm-tips, .md-modal .alert-tips {
-    padding: 60px 20px;
+    padding: 60px 20px 40px 20px;
   }
 
   .md-modal .confirm-tips {

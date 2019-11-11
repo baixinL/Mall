@@ -1,7 +1,6 @@
 <template>
   <div>
     <nav-header></nav-header>
-    <!-- <nav-header1></nav-header1> -->
     <nav-bread>
       <span>Goods</span>
     </nav-bread>
@@ -112,7 +111,6 @@
 import "./../assets/css/base.css";
 import "./../assets/css/product.css";
 import NavHeader from "./../components/NavHeader";
-import NavHeader1 from "./../components/NavHeader1";
 import NavFooter from "./../components/NavFooter";
 import NavBread from "./../components/NavBread";
 import Modal from "./../components/Modal";
@@ -156,7 +154,6 @@ export default {
   },
   components: {
     NavHeader,
-    NavHeader1,
     NavFooter,
     NavBread,
     Modal

@@ -73,7 +73,7 @@
         <div class="md-overlay" v-if="loginModalFlag" @click="loginModalFlag=false"></div>
     </header>
 </template>
-<style>
+<style scoped>
   .header {
     width: 100%;
     height: 70px;

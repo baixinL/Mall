@@ -69,14 +69,14 @@
                     </a>
                   </div>
                   <div class="cart-item-pic">
-                    <img v-lazy="'/static/'+item.productImage" v-bind:alt="item.productName">
+                    <img v-lazy="'/static/'+item.prodcutImg" v-bind:alt="item.productName">
                   </div>
                   <div class="cart-item-title">
                     <div class="item-name">{{item.productName}}</div>
                   </div>
                 </div>
                 <div class="cart-tab-2">
-                  <div class="item-price">{{item.salePrice|currency('$')}}</div>
+                  <div class="item-price">{{item.prodcutPrice|currency('$')}}</div>
                 </div>
                 <div class="cart-tab-3">
                   <div class="item-quantity">
@@ -90,7 +90,7 @@
                   </div>
                 </div>
                 <div class="cart-tab-4">
-                  <div class="item-price-total">{{(item.productNum*item.salePrice)|currency('$')}}</div>
+                  <div class="item-price-total">{{(item.productNum*item.prodcutPrice)|currency('$')}}</div>
                 </div>
                 <div class="cart-tab-5">
                   <div class="cart-item-opration">
@@ -139,7 +139,7 @@
     <nav-footer></nav-footer>
   </div>
 </template>
-<style>
+<style scoped>
   .input-sub,.input-add{
     min-width: 40px;
     height: 100%;
@@ -164,11 +164,12 @@
   }
 </style>
 <script>
+    import './../assets/css/base.css'
+    import './../assets/css/checkout.css'
     import NavHeader from './../components/NavHeader'
     import NavFooter from './../components/NavFooter'
     import NavBread from './../components/NavBread'
     import Modal from './../components/Modal'
-    import {currency} from './../util/currency'
     import axios from 'axios'
     export default{
         data(){
@@ -181,30 +182,30 @@
         mounted(){
             this.init();
         },
-        filters:{
-          currency:currency
-        },
-        computed:{
-          checkAllFlag(){
-            return this.checkedCount == this.cartList.length;
-          },
-          checkedCount(){
-            var i = 0;
-            this.cartList.forEach((item)=>{
-              if(item.checked=='1')i++;
-            })
-            return i;
-          },
-          totalPrice(){
-            var money = 0;
-            this.cartList.forEach((item)=>{
-              if(item.checked=='1'){
-                money += parseFloat(item.salePrice)*parseInt(item.productNum);
-              }
-            })
-            return money;
-          }
-        },
+        // filters:{
+        //   currency:currency
+        // },
+        // computed:{
+        //   checkAllFlag(){
+        //     return this.checkedCount == this.cartList.length;
+        //   },
+        //   checkedCount(){
+        //     var i = 0;
+        //     this.cartList.forEach((item)=>{
+        //       if(item.checked=='1')i++;
+        //     })
+        //     return i;
+        //   },
+        //   totalPrice(){
+        //     var money = 0;
+        //     this.cartList.forEach((item)=>{
+        //       if(item.checked=='1'){
+        //         money += parseFloat(item.prodcutPrice)*parseInt(item.productNum);
+        //       }
+        //     })
+        //     return money;
+        //   }
+        // },
         components:{
           NavHeader,
           NavFooter,
@@ -213,74 +214,79 @@
         },
         methods:{
             init(){
-              axios.get("/users/cartList").then((response)=>{
-                  let res = response.data;
-                  this.cartList = res.result;
+              axios.get('/users/cardList').then((result) => {
+                this.cartList = result.data.result;
+                console.log("cartList",cartList)
+              }).catch((err) => {
               });
+        //       axios.get("/users/cartList").then((response)=>{
+        //           let res = response.data;
+        //           this.cartList = res.result;
+        //       });
             },
             closeModal(){
               this.modalConfirm = false;
             },
             delCartConfirm(item){
-                this.delItem = item;
-                this.modalConfirm = true;
-            },
-            delCart(){
-              axios.post("/users/cartDel",{
-                productId:this.delItem.productId
-              }).then((response)=>{
-                  let res = response.data;
-                  if(res.status == '0'){
-                    this.modalConfirm = false;
-                    var delCount = this.delItem.productNum;
-                    this.$store.commit("updateCartCount",-delCount);
-                    this.init();
-                  }
-              });
+        //         this.delItem = item;
+        //         this.modalConfirm = true;
+        //     },
+        //     delCart(){
+        //       axios.post("/users/cartDel",{
+        //         productId:this.delItem.productId
+        //       }).then((response)=>{
+        //           let res = response.data;
+        //           if(res.status == '0'){
+        //             this.modalConfirm = false;
+        //             var delCount = this.delItem.productNum;
+        //             this.$store.commit("updateCartCount",-delCount);
+        //             this.init();
+        //           }
+        //       });
             },
             editCart(flag,item){
-                if(flag=='add'){
-                  item.productNum++;
-                }else if(flag=='minu'){
-                  if(item.productNum<=1){
-                    return;
-                  }
-                  item.productNum--;
-                }else{
-                  item.checked = item.checked=="1"?'0':'1';
-                }
+        //         if(flag=='add'){
+        //           item.productNum++;
+        //         }else if(flag=='minu'){
+        //           if(item.productNum<=1){
+        //             return;
+        //           }
+        //           item.productNum--;
+        //         }else{
+        //           item.checked = item.checked=="1"?'0':'1';
+        //         }
 
-                axios.post("/users/cartEdit",{
-                  productId:item.productId,
-                  productNum:item.productNum,
-                  checked:item.checked
-                }).then((response)=>{
-                    let res = response.data;
-                    if(res.status=="0"){
-                      this.$store.commit("updateCartCount",flag=="add"?1:-1);
-                    }
-                })
+        //         axios.post("/users/cartEdit",{
+        //           productId:item.productId,
+        //           productNum:item.productNum,
+        //           checked:item.checked
+        //         }).then((response)=>{
+        //             let res = response.data;
+        //             if(res.status=="0"){
+        //               this.$store.commit("updateCartCount",flag=="add"?1:-1);
+        //             }
+        //         })
             },
             toggleCheckAll(){
-                var flag = !this.checkAllFlag;
-                this.cartList.forEach((item)=>{
-                  item.checked = flag?'1':'0';
-                })
-                axios.post("/users/editCheckAll",{
-                  checkAll:flag
-                }).then((response)=>{
-                    let res = response.data;
-                    if(res.status=='0'){
-                        console.log("update suc");
-                    }
-                })
+        //         var flag = !this.checkAllFlag;
+        //         this.cartList.forEach((item)=>{
+        //           item.checked = flag?'1':'0';
+        //         })
+        //         axios.post("/users/editCheckAll",{
+        //           checkAll:flag
+        //         }).then((response)=>{
+        //             let res = response.data;
+        //             if(res.status=='0'){
+        //                 console.log("update suc");
+        //             }
+        //         })
             },
             checkOut(){
-                if(this.checkedCount>0){
-                    this.$router.push({
-                        path:"/address"
-                    });
-                }
+        //         if(this.checkedCount>0){
+        //             this.$router.push({
+        //                 path:"/address"
+        //             });
+        //         }
             }
         }
     }
