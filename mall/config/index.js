@@ -15,7 +15,7 @@ module.exports = {
         target: "http://localhost:3000", //http://localhost:3000/goods返回json数据
         changeOrigin: true
       },
-      '/users/*': {
+      '/users/**': {
         target: "http://localhost:3000", //http://localhost:3000/goods返回json数据
         changeOrigin: true
       }

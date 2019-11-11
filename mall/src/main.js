@@ -5,7 +5,7 @@ import App from './App'
 import router from './router'
 import VueLazyLoad from 'vue-lazyload'
 import VueInfiniteScroll from 'vue-infinite-scroll'
-
+import {currency} from './util/currency'
 Vue.config.productionTip = false
 Vue.use(VueLazyLoad, {
   preLoad: 1.3,
@@ -13,6 +13,10 @@ Vue.use(VueLazyLoad, {
   loading: '/static/loading-svg/loading-bubbles.svg',
   attempt: 1
 })
+Vue.filter("currency", currency);
+// Vue.filter("currency", function (val) {
+//   return val
+// });
 Vue.use(VueInfiniteScroll)
 /* eslint-disable no-new */
 new Vue({

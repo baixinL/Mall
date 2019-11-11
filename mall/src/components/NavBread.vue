@@ -10,7 +10,7 @@
         </div>
     </section>
 </template>
-<style scoped>
+<style>
   .bread{
       height: 45px;
       line-height: 45px;
