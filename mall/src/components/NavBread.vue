@@ -20,10 +20,16 @@
       padding: 0 10px;
       font-size: 14px;
       color: #a1a1a1;
+      float: left;
   }
+  /* .bread-wrap::after{
+    content: '';
+    height: 0px;
+    clear: both;
+  } */
   .bread-wrap a{
     position: relative;
-      margin-right: 20px;
+    margin-right: 20px;
   }
   .bread-wrap a:after{
       position: absolute;

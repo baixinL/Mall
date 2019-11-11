@@ -55,33 +55,35 @@
               </ul>
             </div>
             <ul class="cart-item-list">
-              <li v-for="item in cartList" v-if="item.checked=='1'">
-                <div class="cart-tab-1">
-                  <div class="cart-item-pic">
-                    <img v-lazy="'/static/'+item.productImage" :alt="item.productName">
-                  </div>
-                  <div class="cart-item-title">
-                    <div class="item-name">{{item.productName}}</div>
-
-                  </div>
-                </div>
-                <div class="cart-tab-2">
-                  <div class="item-price">{{item.salePrice|currency('$')}}</div>
-                </div>
-                <div class="cart-tab-3">
-                  <div class="item-quantity">
-                    <div class="select-self">
-                      <div class="select-self-area">
-                        <span class="select-ipt">×{{item.productNum}}</span>
-                      </div>
+              <block v-for="(item,index) in cartList"  v-bind:key="index">
+                <li  v-if="item.checked=='1'">
+                  <div class="cart-tab-1">
+                    <div class="cart-item-pic">
+                      <img v-lazy="'/static/'+item.productImage" :alt="item.productName">
                     </div>
-                    <div class="item-stock item-stock-no">In Stock</div>
+                    <div class="cart-item-title">
+                      <div class="item-name">{{item.productName}}</div>
+
+                    </div>
                   </div>
-                </div>
-                <div class="cart-tab-4">
-                  <div class="item-price-total">{{(item.salePrice*item.productNum)|currency('$')}}</div>
-                </div>
-              </li>
+                  <div class="cart-tab-2">
+                    <div class="item-price">{{item.salePrice|currency('$')}}</div>
+                  </div>
+                  <div class="cart-tab-3">
+                    <div class="item-quantity">
+                      <div class="select-self">
+                        <div class="select-self-area">
+                          <span class="select-ipt">×{{item.productNum}}</span>
+                        </div>
+                      </div>
+                      <div class="item-stock item-stock-no">In Stock</div>
+                    </div>
+                  </div>
+                  <div class="cart-tab-4">
+                    <div class="item-price-total">{{(item.salePrice*item.productNum)|currency('$')}}</div>
+                  </div>
+                </li>
+              </block>
             </ul>
           </div>
         </div>

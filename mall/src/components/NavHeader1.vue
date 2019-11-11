@@ -76,7 +76,7 @@
 <style>
   .header {
     width: 100%;
-    height: 70px;
+    height: 45px;
     background-color: white;
     font-family: "moderat",sans-serif;
     font-size: 16px;
@@ -98,8 +98,7 @@
     margin-left: -20px;
   }
   .navbar-brand-logo {
-    width: 60px;
-    height: 60px;
+    width: 120px;
   }
   .header a, .footer a {
     color: #666;
@@ -150,42 +149,23 @@
     import './../assets/css/login.css'
     import axios from 'axios'
     import { mapState } from 'vuex'
-import Axios from 'axios'
     export default{
         data() {
             return{
               userName: '',
               userPwd: '',
               errorTip: false,
-              loginModalFlag: false,
-              nickName:'',
-              cartCount:0
+              loginModalFlag: true
             }
         },
         // computed: {
         //   ...mapState(['nickName','cartCount'])
         // },
-        /*nickName(){
-          return this.$store.state.nickName;
-        },
-        **/
-        cartCount(){
-          // return this.$store.state.cartCount;
-        },
         mounted () {
-          //初始化
-            this.checkLogin();
+            // this.checkLogin();
         },
         methods: {
             checkLogin(){
-              axios.get('/users/checkLogin').then((result) => {
-                let res = result.data;
-                if(res.status == '0') {
-                  this.nickName = res.result.userName;
-                }
-              }).catch((err) => {
-
-              });
 //                 axios.get("/users/checkLogin").then((response)=>{
 //                     var res = response.data;
 //                     var path = this.$route.pathname;
@@ -201,26 +181,10 @@ import Axios from 'axios'
 //                 });
             },
             login () {
-                if(!this.userName || !this.userPwd){
-                  this.errorTip = true;
-                  return;
-                }
-                axios.post("/users/login", {
-                  userName: this.userName,
-                  userPwd: this.userPwd
-                }).then((result) => {
-                  let res = result.data;
-                  if(res.status=='0') {
-                    this.errorTip = false;
-                    this.loginModalFlag = false;
-                    this.nickName = res.result.userName;
-                    //  alert("login successfully")
-                  } else {
-                    this.errorTip = true;
-                  }
-                }).catch((err) => {
-                    this.errorTip = true;
-                });
+                // if(!this.userName || !this.userPwd){
+                //   this.errorTip = true;
+                //   return;
+                // }
                 // axios.post("/users/login",{
                 //   userName:this.userName,
                 //   userPwd:this.userPwd
@@ -237,19 +201,6 @@ import Axios from 'axios'
                 // });
             },
             logOut () {
-              axios.post('/users/logout').then((result) => {
-                let res = result.data;
-                if(res.status === '0') {
-                  this.nickName = '';
-                  // alert('logOut successed');
-                }
-                else
-                {
-                  // alert('logOut failed');
-                }
-              }).catch((err) => {
-
-              });
 //                 axios.post("/users/logout").then((response)=>{
 //                     let res = response.data;
 //                     if(res.status=="0"){

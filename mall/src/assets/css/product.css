@@ -61,11 +61,12 @@
 }
 
 .accessory-list .pic img {
-  width: 100%;
+  width: calc(100% - 4px);
 }
 
 .accessory-list .main {
   padding: 20px 10px 10px 10px;
+  text-align: left;
 }
 
 .accessory-list .main .name {

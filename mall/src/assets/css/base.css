@@ -1256,7 +1256,7 @@ html {
   }
 
   .md-modal .confirm-tips, .md-modal .alert-tips {
-    padding: 30px 10px;
+    padding: 60px 20px;
   }
 
   .md-modal .confirm-tips {
@@ -1286,7 +1286,14 @@ html {
     display: flex;
     margin-top: 0;
   }
-
+  .btn-group-wrap {
+    width: 100%;
+    display: flex;
+    flex:1;
+  }
+  .close-wrap {
+    width: 100%;
+  }
   .md-modal .btn-wrap .btn {
     -webkit-box-flex: 1;
     -webkit-flex: 1;
