@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+let counter = 1;
+let CountedId = {
+  type: Number,
+  default: () => counter++
+};
 var userSchema = new Schema({
-  "userId": String,
   "userName": String,
   "userPwd": String,
   "orderList": Array,

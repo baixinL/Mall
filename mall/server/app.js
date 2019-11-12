@@ -30,7 +30,7 @@ app.use(function (req, res, next) {
     next(); //已登录
   } else {
     //白名单
-    if (req.originalUrl == '/users/login' || req.originalUrl == '/users/logout' || req.path == '/goods/list') {
+    if (req.originalUrl == '/users/login' || req.originalUrl == '/users/logout' || req.path == '/goods/list' || req.path == '/users/register') {
       next();
     } else {
       res.json({

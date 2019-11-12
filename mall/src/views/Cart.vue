@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-header></nav-header>
+    <nav-header :loginFlag = "toLogin"></nav-header>
     <nav-bread>
       <span>My Cart</span>
     </nav-bread>
@@ -170,7 +170,7 @@
     </div>
     <Modal :mdShow="modalConfirm" @close="closeModal">
       <p slot="message">Do you want to delete this data?</p>
-      <div slot="btnGroup">
+      <div slot="btnGroup" class="btn-group-wrap">
         <a href="javascript:;" class="btn btn--m" @click="delCart">Sure</a>
         <a href="javascript:;" class="btn btn--m btn--red" @click="modalConfirm = false">Cancel</a>
       </div>
@@ -212,17 +212,24 @@ import NavFooter from "./../components/NavFooter";
 import NavBread from "./../components/NavBread";
 import Modal from "./../components/Modal";
 import axios from "axios";
-// import { currency } from "./../util/currency";
+import { checkCookie } from "../util/cookie";
 export default {
   data() {
     return {
       cartList: [],
       delItem: {},
       modalConfirm: false,
-      productId: ""
+      productId: "",
+      toLogin: false,
+      path: '/cart'
     };
   },
   mounted() {
+    if( !checkCookie('userId') ) {
+        this.toLogin = true;
+      } else {
+        // alert("You Need to Sign in!");
+      }
     this.init();
   },
   computed: {
@@ -258,7 +265,8 @@ export default {
       axios
         .get("/users/cartList")
         .then(result => {
-          this.cartList = result.data.result;
+          let data = result.data;
+          if(data.status=='0') this.cartList = result.data.result;
         })
         .catch(err => {});
     },

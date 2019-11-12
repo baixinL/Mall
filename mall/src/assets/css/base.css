@@ -1066,8 +1066,25 @@ html {
   position: fixed;
   top: 50%;
   left: 50%;
+  height: auto;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  visibility: hidden;
+  z-index: 202;
+}
+.md-modal-small {
+  width: 120px;
+  height: 80px;
+}
+.md-modal-big {
   width: 535px;
   height: auto;
+}
+.md-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
   -webkit-transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
@@ -1142,8 +1159,11 @@ html {
   text-align: center;
 }
 
-.md-modal .md-modal-inner {
+.md-modal .md-modal-inn {
   padding: 60px 50px;
+}
+.md-modal .md-modal-inn-sm {
+  padding: 0;
 }
 
 .md-modal .btn-wrap {
@@ -1172,6 +1192,7 @@ html {
   min-height: 5.65em;
   flex-direction: column;
   justify-content: center;
+  padding-bottom: 8px;
 }
 
 .md-modal .alert-tips {

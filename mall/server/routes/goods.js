@@ -69,9 +69,9 @@ router.get("/list", function (req, res, next) {
 
 //加入到购物车,类型post：req.body
 router.post('/addCart', function (req, res, next) {
-  var userId = "10001", productId = req.body.productId;
+  var userId = req.cookies.userId, productId = req.body.productId;
   var User = require('./../models/user');
-  User.findOne({userId: userId}, function (err1, userDoc) {
+  User.findOne({_id: userId}, function (err1, userDoc) {
         if(err1) {
           res.json({
             status:'1',

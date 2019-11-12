@@ -108,7 +108,8 @@
               </li>
               <li class="order-total-price">
 
-                <span>Order total:{{orderTotal|currency('￥')}}</span>
+                <span>Order total:</span>
+                <span>{{orderTotal|currency('￥')}}</span>
               </li>
             </ul>
           </div>

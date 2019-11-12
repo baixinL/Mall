@@ -13,23 +13,84 @@ router.get('/', (req, res, next) => {
 router.get('/hello',  (req, res, next) => {
   res.send('hello everyone.');
 });
+
+//注册
+router.post('/register', (req, res, next) => {
+    let userName = req.body.userName;
+    let userPwd = req.body.userPwd;
+    // console.log("register");
+
+  //拿到参数，帅选数据
+  User.findOne({userName: userName}, (err, doc) => {
+    if (doc)
+    {
+      res.json({
+        status: '1',
+        msg: '用户名已注册',
+        result: ''
+      })
+    } else {
+      User.create({
+        userName: userName,
+        userPwd: userPwd,
+        "orderList": [],
+        "cardList": [],
+        "addressList": []
+      }).then((new_user) => {
+        if (new_user) {
+          //设置cookie
+          res.cookie('userId', new_user._id, {
+            path: '/',
+            maxAge: 1000 * 60 * 60
+          })
+          res.cookie('userName', new_user.userName, {
+            path: '/',
+            maxAge: 1000 * 60 * 60
+          })
+          //本地
+          res.locals.userId = new_user._id;
+          res.locals.userName = new_user.userName;
+          //cookie可能会伪造
+          // res.session.user = doc;
+          //返回数据
+          res.json({
+            status: '0',
+            msg: '',
+            result: {
+              userName: userName
+            }
+          })
+        }
+      }).catch((err1) => {
+        res.json({
+          status: '1',
+          msg: err1.message,
+          result: ''
+        })
+      });
+    }
+  });
+
+});
+
+
 router.post('/login',  (req, res, next) => {
   let params ={
     userName: req.body.userName,
     userPwd: req.body.userPwd
   }
-  // console.log("login");
+  console.log("login");
   //拿到参数，帅选数据
   User.findOne(params, function (err, doc) {
     if (err || !doc) {
       res.json({
         status:'1',
-        msg: '用户名或密码错误',
+        msg: err.message,
       })
     } else {
       if (doc) {
         //设置cookie
-        res.cookie('userId',doc.userId, {
+        res.cookie('userId', doc._id, {
           path:'/',
           maxAge: 1000 * 60 * 60
         })
@@ -37,6 +98,8 @@ router.post('/login',  (req, res, next) => {
           path: '/',
           maxAge: 1000 * 60 * 60
         })
+        res.locals.userId = doc._id;
+        res.locals.userName = doc.userName;
         //cookie可能会伪造
         // res.session.user = doc;
         //返回数据
@@ -63,6 +126,10 @@ router.post('/logout',  (req, res, next) => {
     'path': '/',
     maxAge: -1
   });
+  res.cookie("userName", '', {
+    'path': '/',
+    maxAge: -1
+  });
   res.json({
     status:'0',
     msg:'',
@@ -82,7 +149,7 @@ router.get('/checkLogin',  (req, res, next) => {
   } else {
     res.json({
       status: '1',
-      msg: '未登录',
+      msg: 'Not logged in',
       result: {
         userName: ''
       }
@@ -94,7 +161,9 @@ router.get('/checkLogin',  (req, res, next) => {
 router.get('/cartList', (req, res, next) => {
   var userId = req.cookies.userId;
   // console.log("获取购物车数据");
-  User.findOne({userId:userId},  (err, doc) => {
+  User.findOne({
+        _id: userId
+      }, (err, doc) => {
     // console.log("findOne");
     if(err) {
       res.json({
@@ -118,7 +187,7 @@ router.post('/delCart', (req, res, next) => {
   let productId = req.body.productId;
   let userId = req.cookies.userId;
   User.updateOne({
-    userId: userId
+    _id: userId
   }, {
     $pull: {
       'cardList': {'productId': productId}
@@ -146,7 +215,7 @@ router.post('/editCard',(req, res, next) => {
   let productNum = req.body.productNum;
   let checked = req.body.checked;
   User.updateOne({
-    userId: userId,
+    _id: userId,
     'cardList.productId': productId
   }, {
     'cardList.$.productNum': productNum,
@@ -172,7 +241,7 @@ router.post('/editCheckAll', (req, res, next) => {
    let userId = req.cookies.userId;
    let checkAll = req.body.checkAll ? '1' : '0';
    User.findOne({
-     userId: userId
+     _id: userId
    }, (err, user) => {
      if (err || !user) {
        res.json({
@@ -206,7 +275,7 @@ router.post('/editCheckAll', (req, res, next) => {
 router.get('/addressList', function (req, res, next) {
   let userId = req.cookies.userId;
   User.findOne({
-    userId: userId
+    _id: userId
   },(err, user) => {
     if(err) {
       res.json({
@@ -235,7 +304,9 @@ router.post('/setDefault', (req, res, next) => {
     })
     return
   }
-  User.findOne({ userId: userId }, (err, user) => {
+  User.findOne({
+        _id: userId
+      }, (err, user) => {
     if (err) {
       res.json({
         status: '1',
@@ -279,7 +350,7 @@ router.post('/delAddress', (req, res, next) => {
     return
   }
   User.updateOne({
-    userId: userId
+    _id: userId
   }, {
       $pull: {
           'addressList': { "addressId": addrId }

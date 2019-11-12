@@ -18,6 +18,13 @@
             <path class="path3" d="M27.514 25.594c-1.769 0-3.203 1.434-3.203 3.203s1.434 3.203 3.203 3.203c1.769 0 3.203-1.434 3.203-3.203s-1.434-3.203-3.203-3.203zM27.514 30.717c-1.060 0-1.92-0.86-1.92-1.92s0.86-1.92 1.92-1.92c1.060 0 1.92 0.86 1.92 1.92s-0.86 1.92-1.92 1.92z"></path>
             <path class="path4" d="M9.599 25.594c-1.769 0-3.203 1.434-3.203 3.203s1.434 3.203 3.203 3.203c1.769 0 3.203-1.434 3.203-3.203s-1.434-3.203-3.203-3.203zM9.599 30.717c-1.060 0-1.92-0.86-1.92-1.92s0.86-1.92 1.92-1.92c1.060 0 1.92 0.86 1.92 1.92s-0.86 1.92-1.92 1.92z"></path>
           </symbol>
+          <symbol id="icon-ok" viewBox="0 0 32 32">
+            <title>ok</title>
+            <path
+              class="path1"  fill="#fff"
+              d="M31.020 0.438c-0.512-0.363-1.135-0.507-1.757-0.406s-1.166 0.435-1.529 0.937l-17.965 24.679-5.753-5.67c-0.445-0.438-1.035-0.679-1.664-0.679s-1.219 0.241-1.664 0.679c-0.917 0.904-0.917 2.375 0 3.279l7.712 7.6c0.438 0.432 1.045 0.681 1.665 0.681l0.195-0.008c0.688-0.057 1.314-0.406 1.717-0.959l19.582-26.9c0.754-1.038 0.512-2.488-0.538-3.233z"
+            />
+          </symbol>
         </defs>
       </svg>
         <div class="navbar">
@@ -33,7 +40,7 @@
                 <a href="javascript:void(0)" class="navbar-link" @click="logOut" v-else>Logout</a>
                 <div class="navbar-cart-container">
                   <span class="navbar-cart-count" v-text="cartCount" v-if="cartCount"></span>
-                  <a class="navbar-link navbar-cart-link" href="/#/cart">
+                  <a class="navbar-link navbar-cart-link" href="javascript:void(0);" @click.prevent="toCart('/cart')">
                     <svg class="navbar-cart-logo">
                       <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-cart"></use>
                     </svg>
@@ -42,8 +49,9 @@
               </div>
             </div>
         </div>
-        <div class="md-modal modal-msg md-modal-transition" v-bind:class="{'md-show':loginModalFlag}">
-          <div class="md-modal-inner">
+        <!-- 登录弹框 开始-->
+        <div class="md-modal md-modal-big modal-msg md-modal-transition" v-bind:class="{'md-show':loginModalFlag}">
+          <div class="md-modal-inn md-modal-inner">
             <div class="md-top">
               <div class="md-title">Login in</div>
               <button class="md-close" @click="loginModalFlag=false">Close</button>
@@ -51,7 +59,7 @@
             <div class="md-content">
               <div class="confirm-tips">
                 <div class="error-wrap">
-                  <span class="error error-show" v-show="errorTip">用户名或者密码错误</span>
+                  <span class="error error-show" v-show="errorTip">Name or password error</span>
                 </div>
                 <ul>
                   <li class="regi_form_input">
@@ -64,13 +72,68 @@
                   </li>
                 </ul>
               </div>
+              <div class="go-register">
+                <a href="javascript:void(0)" @click="goToRegister">Sign up?</a>
+              </div>
               <div class="login-wrap">
-                <a href="javascript:;" class="btn-login" @click="login">登  录</a>
+                <a href="javascript:;" class="btn-login" @click="login">Login in</a>
               </div>
             </div>
           </div>
         </div>
-        <div class="md-overlay" v-if="loginModalFlag" @click="loginModalFlag=false"></div>
+         <!-- 登录弹框 结束-->
+        <!-- 注册弹框 开始-->
+        <div class="md-modal md-modal-big modal-msg md-modal-transition" v-bind:class="{'md-show':registerModalFlag}">
+          <div class="md-modal-inn md-modal-inner">
+            <div class="md-top">
+              <div class="md-title">Sign up</div>
+              <button class="md-close" @click="registerModalFlag=false">Close</button>
+            </div>
+            <div class="md-content">
+              <div class="confirm-tips">
+                <div class="error-wrap">
+                  <span class="error error-show" v-show="errorRegisterTip">{{registerTipText}}</span>
+                </div>
+                <ul>
+                  <li class="regi_form_input">
+                    <i class="icon IconPeople"></i>
+                    <input type="text" tabindex="1" name="loginname" v-model="userName" class="regi_login_input regi_login_input_left" placeholder="User Name" data-type="loginname">
+                  </li>
+                  <li class="regi_form_input noMargin">
+                    <i class="icon IconPwd"></i>
+                    <input type="password" tabindex="2"  name="password" v-model="userPwd" class="regi_login_input regi_login_input_left login-input-no input_text" placeholder="Password">
+                  </li>
+                  <li class="regi_form_input noMargin">
+                    <i class="icon IconPwd"></i>
+                    <input type="password" tabindex="3"  name="password2" v-model="userPwd2" class="regi_login_input regi_login_input_left login-input-no input_text" placeholder="Re-enter password" @keyup.enter="register">
+                  </li>
+                </ul>
+                <div class="error-wrap">
+                  <span class="error error-show" v-show="errorTip_pwd">The two passwords are inconsistent!</span>
+                </div>
+              </div>
+              <div class="login-wrap">
+                <a href="javascript:;" class="btn-login" @click="register">Sign up</a>
+              </div>
+            </div>
+          </div>
+        </div>
+         <!-- 注册弹框 结束-->
+        <div class="md-overlay" v-if="loginModalFlag||registerModalFlag" @click="loginModalFlag=registerModalFlag=false"></div>
+        <!-- 注册成功 -->
+
+        <one-line-model v-bind:mdShow="mdSucc">
+          <p slot="message" style="line-height: 80px;">
+            <i class="" style="width: 26px;height: 26px;border-radius: 50%;background:orange">
+              <svg style="width: 18px;height: 18px;">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-ok" />
+              </svg>
+            </i>
+
+            <span style="text-align:base">Success!</span>
+          </p>
+
+        </one-line-model>
     </header>
 </template>
 <style>
@@ -145,22 +208,63 @@
     height: 25px;
     transform: scaleX(-1);
   }
+  .go-register {
+    float: right;
+  }
+  .go-register a{
+    color: #61b1ef;
+    font-size: 12px;
+  }
+  @media screen and (max-width: 767px) {
+    .go-register {
+      margin-right: 20px;
+    }
+  }
+  .go-register::after {
+    visibility: hidden;
+    display: block;
+    content: " ";
+    clear: both;
+  }
 </style>
 <script>
     import './../assets/css/login.css'
+    import './../assets/css/base.css'
     import axios from 'axios'
     import { mapState } from 'vuex'
+    import Modal from "./../components/Modal";
+    import OneLineModel from "./../components/OneLineModel";
+    import { checkCookie } from "../util/cookie";
+    import { reload } from "../util/reload";
 import Axios from 'axios'
     export default{
+      props:['loginFlag'],
         data() {
             return{
               userName: '',
               userPwd: '',
+              userPwd2: '',
               errorTip: false,
+              errorRegisterTip:false,
+              registerTipText:'',
+              errorTip_pwd: false,
               loginModalFlag: false,
+              registerModalFlag: false,
+              mdSucc: false,
               nickName:'',
               cartCount:0
             }
+        },
+        components:{
+          Modal,
+          OneLineModel
+        },
+        watch:{
+          "loginFlag": function(newVal) {
+            console.log("loginFlag", newVal);
+
+            if(newVal) this.loginModalFlag = true;
+          }
         },
         // computed: {
         //   ...mapState(['nickName','cartCount'])
@@ -169,6 +273,7 @@ import Axios from 'axios'
           return this.$store.state.nickName;
         },
         **/
+
         cartCount(){
           // return this.$store.state.cartCount;
         },
@@ -177,6 +282,32 @@ import Axios from 'axios'
             this.checkLogin();
         },
         methods: {
+            // closeLoginOrSignUp()
+            // {
+            //   this.loginMFlag = false;
+            //   this.registerModalFlag = false;
+            // },
+            // closeLogin () {
+            //   this.loginMFlag = false;
+            // },
+            toCart(path) {
+              if( checkCookie('userId') ) {
+                this.$router.push({path: path});
+              } else {
+                alert("You Need to Sign in!");
+              }
+
+              },
+            showSucc () {
+              this.mdSucc = true;
+              setTimeout(() => {
+                  this.mdSucc = false;
+              }, 600);
+            },
+            goToRegister () {
+              this.loginModalFlag = false;
+              this.registerModalFlag = true;
+            },
             checkLogin(){
               axios.get('/users/checkLogin').then((result) => {
                 let res = result.data;
@@ -186,25 +317,52 @@ import Axios from 'axios'
               }).catch((err) => {
 
               });
-//                 axios.get("/users/checkLogin").then((response)=>{
-//                     var res = response.data;
-//                     var path = this.$route.pathname;
-//                     if(res.status=="0"){
-// //                      this.nickName = res.result;
-//                       this.$store.commit("updateUserInfo",res.result);
-//                       this.loginModalFlag = false;
-//                     }else{
-//                       if(this.$route.path!="/goods"){
-//                         this.$router.push("/goods");
-//                       }
-//                     }
-//                 });
+            },
+            register () {
+              if(!this.userName || !this.userPwd || !this.userPwd2){
+                this.errorRegisterTip = true;
+                this.errorTip_pwd = false;
+                this.registerTipText ="Not completed";
+                // console.log("信息未填完");
+
+                return;
+              } else if(this.userPwd != this.userPwd2){
+                this.errorTip_pwd = true;
+                this.errorRegisterTip = false;
+                // console.log("两次密码输入不一致");
+                return
+              }else {
+                this.errorRegisterTip = false;
+                this.errorTip_pwd = false;
+              }
+              // console.log("发注册请求");
+              //发注册请求
+               axios.post("/users/register", {
+                userName: this.userName,
+                userPwd: this.userPwd
+               }).then((result) => {
+                  let res = result.data;
+                  if(res.status=='0') {
+                    this.registerModalFlag = false;
+                    this.nickName = res.result.userName;
+                    //  alert("login register");
+                    this.showSucc();
+                  } else {
+                    this.errorRegisterTip = true;
+                    this.registerTipText = res.msg ? res.msg : "Failed！";
+                  }
+               }).catch((err) => {
+                    // console.log("catch((err)",err);
+                    this.registerTipText = err.message ? err.message : "Failed！";
+               });
             },
             login () {
                 if(!this.userName || !this.userPwd){
                   this.errorTip = true;
                   return;
                 }
+                this.errorTip = false;
+
                 axios.post("/users/login", {
                   userName: this.userName,
                   userPwd: this.userPwd
@@ -214,34 +372,21 @@ import Axios from 'axios'
                     this.errorTip = false;
                     this.loginModalFlag = false;
                     this.nickName = res.result.userName;
-                    //  alert("login successfully")
+                    this.showSucc();
+                    reload(this.$router);
                   } else {
                     this.errorTip = true;
                   }
                 }).catch((err) => {
                     this.errorTip = true;
                 });
-                // axios.post("/users/login",{
-                //   userName:this.userName,
-                //   userPwd:this.userPwd
-                // }).then((response)=>{
-                //     let res = response.data;
-                //     if(res.status=="0"){//0成功，1失败
-                //       this.errorTip = false;
-                //       this.loginModalFlag = false;
-                //       this.$store.commit("updateUserInfo",res.result.userName);
-                //       this.getCartCount();
-                //     }else{
-                //       this.errorTip = true;
-                //     }
-                // });
             },
             logOut () {
               axios.post('/users/logout').then((result) => {
                 let res = result.data;
                 if(res.status === '0') {
                   this.nickName = '';
-                  // alert('logOut successed');
+                  reload(this.$router);
                 }
                 else
                 {
@@ -250,13 +395,6 @@ import Axios from 'axios'
               }).catch((err) => {
 
               });
-//                 axios.post("/users/logout").then((response)=>{
-//                     let res = response.data;
-//                     if(res.status=="0"){
-// //                        this.nickName = '';
-//                         this.$store.commit("updateUserInfo",res.result.userName);
-//                     }
-//                 })
             },
             getCartCount () {
               // axios.get("users/getCartCount").then(res=>{
