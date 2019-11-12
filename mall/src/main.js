@@ -14,7 +14,7 @@ Vue.prototype.GLOBAL = global_variable
 
 Vue.config.productionTip = false
 Vue.use(VueLazyLoad, {
-  preLoad: 1.3,
+  preLoad: 1,
   error: 'dist/error.png',
   loading: '/static/loading-svg/loading-bubbles.svg',
   attempt: 1

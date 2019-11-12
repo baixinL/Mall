@@ -4,6 +4,7 @@
     <nav-bread>
       <span>Goods</span>
     </nav-bread>
+    <banner :bannersList="bannersList"></banner>
     <div class="accessory-result-page accessory-page">
       <div class="container">
         <div class="filter-nav">
@@ -116,10 +117,12 @@ import NavFooter from "./../components/NavFooter";
 import NavBread from "./../components/NavBread";
 import Modal from "./../components/Modal";
 import axios from "axios";
+import Banner from "./../components/Banner";
 export default {
   data() {
     return {
       goodsList: [],
+      bannersList: [],
       sortFlag: false,
       page: 1,
       pageSize: 3,
@@ -157,7 +160,8 @@ export default {
     NavHeader,
     NavFooter,
     NavBread,
-    Modal
+    Modal,
+    Banner
   },
   methods: {
     getGoodsList(flag) {
@@ -188,6 +192,9 @@ export default {
               this.goodsList = res.result.list;
               this.busy = false;
             }
+
+            //banner
+            if(this.bannersList.length == 0 ) this.bannersList = this.goodsList;
           } else {
             this.goodsList = [];
           }

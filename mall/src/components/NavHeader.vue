@@ -236,7 +236,7 @@
     import OneLineModel from "./../components/OneLineModel";
     import { checkCookie } from "../util/cookie";
     import { reload } from "../util/reload";
-import Axios from 'axios'
+    import Axios from 'axios'
     export default{
       props:['loginFlag'],
         data() {
