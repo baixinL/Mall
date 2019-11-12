@@ -107,7 +107,7 @@
                   </div>
                 </div>
                 <div class="cart-tab-2">
-                  <div class="item-price">{{item.prodcutPrice | currency('$')}}</div>
+                  <div class="item-price">{{item.prodcutPrice | currency('￥')}}</div>
                 </div>
                 <div class="cart-tab-3">
                   <div class="item-quantity">
@@ -121,7 +121,7 @@
                   </div>
                 </div>
                 <div class="cart-tab-4">
-                  <div class="item-price-total">{{(item.productNum*item.prodcutPrice) | currency('$')}}</div>
+                  <div class="item-price-total">{{(item.productNum*item.prodcutPrice) | currency('￥')}}</div>
                   <!---->
                 </div>
                 <div class="cart-tab-5">
@@ -153,8 +153,8 @@
             </div>
             <div class="cart-foot-r">
               <div class="item-total">
-                Item total:
-                <span class="total-price">{{totalPrice | currency('$')}}</span>
+                <span class="total-label">Item total:</span>
+                <span class="total-price">{{totalPrice | currency('￥')}}</span><!---->
               </div>
               <div class="btn-wrap">
                 <a
@@ -169,10 +169,10 @@
       </div>
     </div>
     <Modal :mdShow="modalConfirm" @close="closeModal">
-      <p slot="message">确认删除此条数据?</p>
+      <p slot="message">Do you want to delete this data?</p>
       <div slot="btnGroup">
-        <a href="javascript:;" class="btn btn--m" @click="delCart">确定</a>
-        <a href="javascript:;" class="btn btn--m btn--red" @click="modalConfirm = false">取消</a>
+        <a href="javascript:;" class="btn btn--m" @click="delCart">Sure</a>
+        <a href="javascript:;" class="btn btn--m btn--red" @click="modalConfirm = false">Cancel</a>
       </div>
     </Modal>
     <nav-footer></nav-footer>
@@ -202,6 +202,7 @@
   min-width: 30px;
   text-align: center;
 }
+
 </style>
 <script>
 import "./../assets/css/base.css";
@@ -228,20 +229,21 @@ export default {
       checkAllFlag () {
         return this.checkedCount == this.cartList.length;
       },
-      checkedCount(){
+      checkedCount () {
         var i = 0;
         this.cartList.forEach((item)=>{
           if(item.checked=='1') i++;
         })
         return i;
       },
-    totalPrice() {
+    totalPrice () {
       var money = 0;
       this.cartList.forEach(item => {
         if (item.checked == "1") {
           money += parseFloat(item.prodcutPrice) * parseInt(item.productNum);
         }
       });
+      console.log("money",money);
       return money;
     }
   },
@@ -254,7 +256,7 @@ export default {
   methods: {
     init() {
       axios
-        .get("/users/cardList")
+        .get("/users/cartList")
         .then(result => {
           this.cartList = result.data.result;
         })
@@ -326,11 +328,11 @@ export default {
         });
     },
     checkOut() {
-      //         if(this.checkedCount>0){
-      //             this.$router.push({
-      //                 path:"/address"
-      //             });
-      //         }
+              if(this.checkedCount>0){
+                  this.$router.push({
+                      path:"/address"
+                  });
+              }
     }
   }
 };

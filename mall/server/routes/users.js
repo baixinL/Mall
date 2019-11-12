@@ -91,7 +91,7 @@ router.get('/checkLogin',  (req, res, next) => {
 })
 
 //获取购物车数据
-router.get('/cardList', (req, res, next) => {
+router.get('/cartList', (req, res, next) => {
   var userId = req.cookies.userId;
   // console.log("获取购物车数据");
   User.findOne({userId:userId},  (err, doc) => {
@@ -202,4 +202,104 @@ router.post('/editCheckAll', (req, res, next) => {
      }
    })
 })
+//查询用户地址
+router.get('/addressList', function (req, res, next) {
+  let userId = req.cookies.userId;
+  User.findOne({
+    userId: userId
+  },(err, user) => {
+    if(err) {
+      res.json({
+        status:'1',
+        msg:err.message,
+        result:''
+      })
+    } else {
+      res.json({
+        status: '0',
+        msg: '',
+        result: user.addressList
+      })
+    }
+  })
+})
+//设置默认地址
+router.post('/setDefault', (req, res, next) => {
+  let userId = req.cookies.userId;
+  let addrId = req.body.addressId;
+  if (!addrId) {
+    res.json({
+      status: '1',
+      msg: 'miss addressId',
+      result: ''
+    })
+    return
+  }
+  User.findOne({ userId: userId }, (err, user) => {
+    if (err) {
+      res.json({
+        status: '1',
+        msg: err.message,
+        result: ''
+      })
+    } else {
+      user.addressList.forEach(addr => {
+        if (addr.addressId == addrId) addr.isDefault = true;
+            else addr.isDefault = false;
+      })
+      user.save((err2, doc2) => {
+        if (err2) {
+          res.json({
+            status: '1',
+            msg: err2.message,
+            result: ''
+          })
+        } else {
+          res.json({
+            status: '0',
+            msg: '',
+            result: 'succ'
+          })
+        }
+      })
+    }
+  })
+})
+
+//删除地址
+router.post('/delAddress', (req, res, next) => {
+  let userId = req.cookies.userId;
+  let addrId = req.body.addressId;
+  if (!addrId) {
+    res.json({
+      status: '1',
+      msg: 'miss addressId',
+      result: ''
+    })
+    return
+  }
+  User.updateOne({
+    userId: userId
+  }, {
+      $pull: {
+          'addressList': { "addressId": addrId }
+        }
+     }, (err, raw) => {
+       if (err) {
+          res.json({
+            status: '1',
+            msg: err.message,
+            result: ''
+          })
+        } else  {
+          res.json({
+            status: '0',
+            msg: '',
+            result: 'succ'
+          })
+        }
+    })
+})
+//创建订单
+
 module.exports = router;

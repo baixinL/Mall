@@ -55,11 +55,10 @@
               </ul>
             </div>
             <ul class="cart-item-list">
-              <block v-for="(item,index) in cartList"  v-bind:key="index">
-                <li  v-if="item.checked=='1'">
+                <li v-for="(item,index) in checkedCartList" v-bind:key="index">
                   <div class="cart-tab-1">
                     <div class="cart-item-pic">
-                      <img v-lazy="'/static/'+item.productImage" :alt="item.productName">
+                      <img v-lazy="'/static/'+item.prodcutImg" :alt="item.productName">
                     </div>
                     <div class="cart-item-title">
                       <div class="item-name">{{item.productName}}</div>
@@ -67,7 +66,7 @@
                     </div>
                   </div>
                   <div class="cart-tab-2">
-                    <div class="item-price">{{item.salePrice|currency('$')}}</div>
+                    <div class="item-price">{{item.prodcutPrice|currency('￥')}}</div>
                   </div>
                   <div class="cart-tab-3">
                     <div class="item-quantity">
@@ -80,10 +79,9 @@
                     </div>
                   </div>
                   <div class="cart-tab-4">
-                    <div class="item-price-total">{{(item.salePrice*item.productNum)|currency('$')}}</div>
+                    <div class="item-price-total">{{(item.prodcutPrice*item.productNum)|currency('￥')}}</div>
                   </div>
                 </li>
-              </block>
             </ul>
           </div>
         </div>
@@ -94,23 +92,23 @@
             <ul>
               <li>
                 <span>Item subtotal:</span>
-                <span>{{subTotal|currency('$')}}</span>
+                <span>{{subTotal|currency('￥')}}</span>
               </li>
               <li>
                 <span>Shipping:</span>
-                <span>{{shipping|currency('$')}}</span>
+                <span>{{shipping|currency('￥')}}</span>
               </li>
               <li>
                 <span>Discount:</span>
-                <span>{{discount|currency('$')}}</span>
+                <span>{{discount|currency('￥')}}</span>
               </li>
               <li>
                 <span>Tax:</span>
-                <span>{{tax|currency('$')}}</span>
+                <span>{{tax|currency('￥')}}</span>
               </li>
               <li class="order-total-price">
-                <span>Order total:</span>
-                <span>{{orderTotal|currency('$')}}</span>
+
+                <span>Order total:{{orderTotal|currency('￥')}}</span>
               </li>
             </ul>
           </div>
@@ -133,7 +131,6 @@
   import NavHeader from './../components/NavHeader'
   import NavFooter from './../components/NavFooter'
   import NavBread from './../components/NavBread'
-  import {currency} from './../util/currency'
   import axios from 'axios'
   export default{
       data(){
@@ -143,7 +140,7 @@
               tax:400,
               subTotal:0,
               orderTotal:0,
-              cartList:[]
+              checkedCartList:[]
           }
       },
       mounted(){
@@ -154,18 +151,16 @@
         NavFooter,
         NavBread
       },
-      filters:{
-        currency:currency
-      },
       methods:{
          init(){
             axios.get("/users/cartList").then((response)=>{
                 let res = response.data;
-                this.cartList = res.result;
-
-                this.cartList.forEach((item)=>{
+                let cartList = res.result;
+                this.checkedCartList = [];
+                cartList.forEach((item)=>{
                     if(item.checked=='1'){
-                        this.subTotal += item.salePrice*item.productNum;
+                        this.subTotal += item.prodcutPrice*item.productNum;
+                        this.checkedCartList.push(item)
                     }
                 });
 
@@ -174,7 +169,7 @@
          },
           payMent(){
               var addressId = this.$route.query.addressId;
-              axios.post("/users/payMent",{
+              axios.post("/users/payMent", {
                 addressId:addressId,
                 orderTotal:this.orderTotal
               }).then((response)=>{

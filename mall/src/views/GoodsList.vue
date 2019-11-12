@@ -60,13 +60,13 @@
                   </div>
                   <div class="main">
                     <div class="name">{{item.productName}}</div>
-                    <div class="price">{{item.prodcutPrice | currency('$')}}</div>
+                    <div class="price">{{item.prodcutPrice | currency('￥')}}</div>
                     <div class="btn-area">
                       <a
                         href="javascript:;"
                         class="btn btn--m"
                         @click="addCart(item.productId)"
-                      >加入购物车</a>
+                      >Add to Cart</a>
                     </div>
                   </div>
                 </li>
@@ -86,9 +86,10 @@
       </div>
     </div>
     <modal v-bind:mdShow="mdShow" v-on:close="closeModal">
-      <p slot="message">请先登录,否则无法加入到购物车中!</p>
+      <p slot="message">
+        Please log in first, otherwise you can't join the shopping cart.!</p>
       <div slot="btnGroup" class="close-wrap">
-        <a class="btn btn--m" href="javascript:;" @click="mdShow = false">关闭</a>
+        <a class="btn btn--m" href="javascript:;" @click="mdShow = false">Close</a>
       </div>
     </modal>
     <modal v-bind:mdShow="mdShowCart" v-on:close="closeModal">
@@ -96,11 +97,11 @@
         <svg class="icon-status-ok">
           <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-status-ok" />
         </svg>
-        <span>加入购物车成功!</span>
+        <span>Successfully joined the shopping cart!</span>
       </p>
       <div slot="btnGroup" class="btn-group-wrap">
-        <a class="btn btn--m" href="javascript:;" @click="mdShowCart = false">继续购物</a>
-        <router-link class="btn btn--m btn--red" href="javascript:;" to="/cart">查看购物车</router-link>
+        <a class="btn btn--m" href="javascript:;" @click="mdShowCart = false">Continue</a>
+        <router-link class="btn btn--m btn--red" href="javascript:;" to="/cart">View Cart</router-link>
       </div>
     </modal>
     <div class="md-overlay" v-show="overLayFlag" @click.stop="closePop"></div>
